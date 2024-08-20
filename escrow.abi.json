@@ -1,0 +1,275 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.76.0-nightly",
+            "commitHash": "d86d65bbc19b928387f68427fcc3a0da498d8a19",
+            "commitDate": "2023-12-10",
+            "channel": "Nightly",
+            "short": "rustc 1.76.0-nightly (d86d65bbc 2023-12-10)"
+        },
+        "contractCrate": {
+            "name": "escrow",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "multiversx-sc",
+            "version": "0.47.4"
+        }
+    },
+    "name": "Escrow",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "upgrade",
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "createOffer",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "accepted_token",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "accepted_nonce",
+                    "type": "u64"
+                },
+                {
+                    "name": "accepted_amount",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "accepted_address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "cancelOffer",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "offer_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "acceptOffer",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "offer_id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getCreatedOffers",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "variadic<multi<u64,Offer>>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "getWantedOffers",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "variadic<multi<u64,Offer>>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "getOffer",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "id",
+                    "type": "u64"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "Offer"
+                }
+            ]
+        },
+        {
+            "name": "getLastOfferId",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        }
+    ],
+    "events": [
+        {
+            "identifier": "createOffer",
+            "inputs": [
+                {
+                    "name": "creator",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "buyer",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "epoch",
+                    "type": "u64",
+                    "indexed": true
+                },
+                {
+                    "name": "timestamp",
+                    "type": "u64",
+                    "indexed": true
+                },
+                {
+                    "name": "offer",
+                    "type": "Offer"
+                }
+            ]
+        },
+        {
+            "identifier": "cancelOffer",
+            "inputs": [
+                {
+                    "name": "creator",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "buyer",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "epoch",
+                    "type": "u64",
+                    "indexed": true
+                },
+                {
+                    "name": "timestamp",
+                    "type": "u64",
+                    "indexed": true
+                },
+                {
+                    "name": "offer",
+                    "type": "Offer"
+                }
+            ]
+        },
+        {
+            "identifier": "acceptOffer",
+            "inputs": [
+                {
+                    "name": "creator",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "buyer",
+                    "type": "Address",
+                    "indexed": true
+                },
+                {
+                    "name": "epoch",
+                    "type": "u64",
+                    "indexed": true
+                },
+                {
+                    "name": "timestamp",
+                    "type": "u64",
+                    "indexed": true
+                },
+                {
+                    "name": "offer",
+                    "type": "Offer"
+                }
+            ]
+        }
+    ],
+    "esdtAttributes": [],
+    "hasCallback": false,
+    "types": {
+        "EsdtTokenPayment": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "token_nonce",
+                    "type": "u64"
+                },
+                {
+                    "name": "amount",
+                    "type": "BigUint"
+                }
+            ]
+        },
+        "Offer": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "creator",
+                    "type": "Address"
+                },
+                {
+                    "name": "offered_payment",
+                    "type": "EsdtTokenPayment"
+                },
+                {
+                    "name": "accepted_payment",
+                    "type": "EsdtTokenPayment"
+                },
+                {
+                    "name": "accepted_address",
+                    "type": "Address"
+                }
+            ]
+        }
+    }
+}
