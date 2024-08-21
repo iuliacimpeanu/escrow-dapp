@@ -801,6 +801,16 @@
   dependencies:
     axios "^1.6.5"
 
+"@multiversx/sdk-network-providers@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@multiversx/sdk-network-providers/-/sdk-network-providers-2.6.0.tgz#1ff717ecd9e177aefe7d71c7c1976c6c007cc664"
+  integrity sha512-fAj7Py3otll00iFunwcDwp7/i7NiHInLN4EhdEFVfKNY5Z+roGI6YwPy3i60l8JApGE6DzmBQ22nVFYv8NzrPA==
+  dependencies:
+    bech32 "1.1.4"
+    bignumber.js "9.0.1"
+    buffer "6.0.3"
+    json-bigint "1.0.0"
+
 "@multiversx/sdk-opera-provider@1.0.0-alpha.1":
   version "1.0.0-alpha.1"
   resolved "https://registry.yarnpkg.com/@multiversx/sdk-opera-provider/-/sdk-opera-provider-1.0.0-alpha.1.tgz#2beebd5423fdc2e667b33660f17cbff325449097"

@@ -12,6 +12,7 @@
   "dependencies": {
     "@multiversx/sdk-core": "^13.4.0",
     "@multiversx/sdk-dapp": "^2.38.5",
+    "@multiversx/sdk-network-providers": "^2.6.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.41",
     "react": "^18.3.1",
