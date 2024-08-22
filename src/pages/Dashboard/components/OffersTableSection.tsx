@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Address, SmartContractQueriesController, SmartContractTransactionsFactory } from "@multiversx/sdk-core";
-import { ContractAddressEnum, nominateValue, WalletAddressEnum } from "../../../utils";
 import { sendTransactions } from "@multiversx/sdk-dapp/services";
 import { useGetActiveTransactionsStatus } from "@multiversx/sdk-dapp/hooks";
+import { formatAmount } from "@multiversx/sdk-dapp/utils/operations";
+import { ContractAddressEnum } from "../../../utils/enums";
 
 interface IOffer{
     id: string,
@@ -11,7 +12,7 @@ interface IOffer{
     acceptedAddress: string
 }
 
-export const OffersTableSection = ({escrow_factory, escrow_controller}: {escrow_factory: SmartContractTransactionsFactory, escrow_controller: SmartContractQueriesController}) => {
+export const OffersTableSection = ({wallet_address, escrow_factory, escrow_controller}: {wallet_address: string, escrow_factory: SmartContractTransactionsFactory, escrow_controller: SmartContractQueriesController}) => {
     
     const [createdOffers, setCreatedOffers] = useState([]);
     const [showTable, setShowTable] = useState(false)
@@ -23,7 +24,7 @@ export const OffersTableSection = ({escrow_factory, escrow_controller}: {escrow_
         const query = escrow_controller.createQuery({
             contract: ContractAddressEnum.escrowContract,
             function: "getCreatedOffers",
-            arguments: [WalletAddressEnum.myWallet],
+            arguments: [wallet_address],
         });
 
         const queryResponse = await escrow_controller.runQuery(query);
@@ -33,7 +34,7 @@ export const OffersTableSection = ({escrow_factory, escrow_controller}: {escrow_
         const parsedOffers = offers.map((offer: any) => ({
             id: offer[0],
             token_identifier: offer[1].offered_payment.token_identifier,
-            amount: nominateValue(offer[1].offered_payment.amount.toString()),
+            amount: formatAmount({input: offer[1].offered_payment.amount.toString()}),
             acceptedAddress: offer[1].accepted_address
         }))
 
@@ -45,21 +46,21 @@ export const OffersTableSection = ({escrow_factory, escrow_controller}: {escrow_
 
         // cancelOffer transaction
         let args = [parseInt(id)]
-        const transaction = escrow_factory.createTransactionForExecute({
-            sender: Address.fromBech32(WalletAddressEnum.myWallet),
+        const tx = escrow_factory.createTransactionForExecute({
+            sender: Address.fromBech32(wallet_address),
             contract: Address.fromBech32(ContractAddressEnum.escrowContract),
             function: "cancelOffer",
             gasLimit: 30000000n,
             arguments: args,
         });
 
-        if (transaction == null) {
+        if (tx == null) {
             console.error("Transaction not found");
             return;
         }
       
         await sendTransactions({
-        transactions: [transaction],
+        transactions: [tx],
         transactionsDisplayInfo: {
             processingMessage: "Processing transaction",
             errorMessage: "An error has occured",

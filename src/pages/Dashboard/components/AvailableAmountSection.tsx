@@ -1,19 +1,17 @@
 import axios from "axios";
 import { useState } from "react";
-import { nominateValue } from "../../../utils/nominateValue";
+import { formatAmount } from "@multiversx/sdk-dapp/utils";
 
 export const AvailableAmountSection = () => {
     const [amount, setAmount] = useState('');
     
     const getAmount = async () => {
         const tx = await axios.get('https://devnet-api.multiversx.com/accounts/erd1mcu0nwa7tufcgtz26p6wavrslsvnpalggkkw8yxg9l3nqapedk2sfq0dxc/tokens');
-        const data = tx.data;
-        let availableAmount: number = 0;
 
-        for(const obj of data) {
+        for(const obj of tx.data) {
             if(obj.identifier.substring(0, 5) === 'WEGLD'){
-                availableAmount = nominateValue(obj.balance);
-                setAmount(availableAmount.toString());
+                let availableAmount = formatAmount({input: obj.balance});
+                setAmount(availableAmount);
                 break;
             }
         }

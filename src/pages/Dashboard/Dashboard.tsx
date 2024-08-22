@@ -5,9 +5,11 @@ import { OffersTableSection } from "./components/OffersTableSection"
 import { CreateOfferSection } from "./components/CreateOfferSection"
 import { AbiRegistry, QueryRunnerAdapter, SmartContractQueriesController, SmartContractTransactionsFactory, TransactionsFactoryConfig } from "@multiversx/sdk-core/out"
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers/out"
+import { useGetAccount } from "@multiversx/sdk-dapp/hooks"
 
 export const Dashboard = () => {
-
+    
+    const { address } = useGetAccount();
     const [abi, setAbi] = useState<AbiRegistry>();
     const [factory, setFactory] = useState<SmartContractTransactionsFactory>()
     const [controller, setController] = useState<SmartContractQueriesController>();
@@ -58,9 +60,9 @@ export const Dashboard = () => {
             <div>
                 <div className="flex">
                     <AvailableAmountSection />
-                    { abi && factory && <CreateOfferSection escrow_factory={factory}/>}
+                    { abi && factory && <CreateOfferSection wallet_address={address} escrow_factory={factory}/>}
                 </div>
-                { abi && factory && controller && <OffersTableSection escrow_factory={factory} escrow_controller={controller}/>}
+                { abi && factory && controller && <OffersTableSection wallet_address={address} escrow_factory={factory} escrow_controller={controller}/>}
             </div>
         </div>
         </AuthRedirectWrapper>

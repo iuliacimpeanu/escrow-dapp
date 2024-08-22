@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { sendTransactions } from "@multiversx/sdk-dapp/services";
 import { SmartContractTransactionsFactory} from "@multiversx/sdk-core"
-import { Address } from "@multiversx/sdk-core/out";
-import { TokenTransfer } from "@multiversx/sdk-core/out";
-import { Token } from "@multiversx/sdk-core/out";
-import { ContractAddressEnum, denominateValue, WalletAddressEnum } from "../../../utils";
+import { Address, TokenTransfer, Token } from "@multiversx/sdk-core/out";
+import { ContractAddressEnum,  } from "../../../utils";
+import { parseAmount } from "@multiversx/sdk-dapp/utils";
 
 const WEGLD_TOKEN: string = 'WEGLD-a28c59';
 
-export const CreateOfferSection = ({escrow_factory}: {escrow_factory: SmartContractTransactionsFactory}) => {
+export const CreateOfferSection = ({wallet_address, escrow_factory}: {wallet_address: string, escrow_factory: SmartContractTransactionsFactory}) => {
+
     const [userInput, setUserInput] = useState<string>('');
     
     const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,11 +17,11 @@ export const CreateOfferSection = ({escrow_factory}: {escrow_factory: SmartContr
 
     const createOffer = async () => {
 
-      let userAmount: bigint = (denominateValue(userInput));
-      let args = [WEGLD_TOKEN, 0, userAmount, WalletAddressEnum.myWallet]
+      let userAmount: bigint = BigInt(parseAmount(userInput));
+      let args = [WEGLD_TOKEN, 0, userAmount, wallet_address]
 
-      const transaction = escrow_factory.createTransactionForExecute({
-          sender: Address.fromBech32(WalletAddressEnum.myWallet),
+      const tx = escrow_factory.createTransactionForExecute({
+          sender: Address.fromBech32(wallet_address),
           contract: Address.fromBech32(ContractAddressEnum.escrowContract),
           function: "createOffer",
           gasLimit: 30000000n,
@@ -35,13 +35,13 @@ export const CreateOfferSection = ({escrow_factory}: {escrow_factory: SmartContr
           
       });
 
-      if (transaction == null) {
+      if (tx == null) {
         console.error("Transaction not found");
         return;
       }
   
       await sendTransactions({
-        transactions: [transaction],
+        transactions: [tx],
         transactionsDisplayInfo: {
           processingMessage: "Processing transaction",
           errorMessage: "An error has occured",
