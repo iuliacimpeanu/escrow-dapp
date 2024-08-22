@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { AbiRegistry, Address, QueryRunnerAdapter, SmartContractQueriesController, SmartContractTransactionsFactory, TransactionsFactoryConfig } from "@multiversx/sdk-core";
+import { Address, SmartContractQueriesController, SmartContractTransactionsFactory } from "@multiversx/sdk-core";
 import { ContractAddressEnum, nominateValue, WalletAddressEnum } from "../../../utils";
 import { sendTransactions } from "@multiversx/sdk-dapp/services";
 import { useGetActiveTransactionsStatus } from "@multiversx/sdk-dapp/hooks";
-import { ApiNetworkProvider } from "@multiversx/sdk-network-providers/out";
 
 interface IOffer{
     id: string,
@@ -11,13 +10,8 @@ interface IOffer{
     amount: string,
     acceptedAddress: string
 }
-// interface ITransactionProps {
-//     escrow_factory: SmartContractTransactionsFactory | any
-//     escrow_controller: SmartContractQueriesController | any
-// }
 
-// export const PaymentsTable: React.FC<ITransactionProps> = ({escrow_factory, escrow_controller}) => {
-export const PaymentsTable = () => {
+export const OffersTableSection = ({escrow_factory, escrow_controller}: {escrow_factory: SmartContractTransactionsFactory, escrow_controller: SmartContractQueriesController}) => {
     
     const [createdOffers, setCreatedOffers] = useState([]);
     const [showTable, setShowTable] = useState(false)
@@ -25,37 +19,15 @@ export const PaymentsTable = () => {
 
     const updateOffersTable = async () => {
 
-        //abi
-        const response = await fetch("escrow.abi.json");
-        const abiJson = await response.text();
-        let abiObj = JSON.parse(abiJson);
-        let abi = AbiRegistry.create(abiObj);
-
-        // queryRunner & networkProvider
-        const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com");
-
-        const queryRunner = new QueryRunnerAdapter({
-            networkProvider: apiNetworkProvider
-        });
-        
-        let controller = new SmartContractQueriesController({
-            queryRunner: queryRunner
-        });
-
-        controller = new SmartContractQueriesController({
-            queryRunner: queryRunner,
-            abi: abi
-        });
-
         // query
-        const query = controller.createQuery({
+        const query = escrow_controller.createQuery({
             contract: ContractAddressEnum.escrowContract,
             function: "getCreatedOffers",
             arguments: [WalletAddressEnum.myWallet],
         });
 
-        const queryResponse = await controller.runQuery(query);
-        const [offers] = controller.parseQueryResponse(queryResponse);
+        const queryResponse = await escrow_controller.runQuery(query);
+        const [offers] = escrow_controller.parseQueryResponse(queryResponse);
 
         // parse response
         const parsedOffers = offers.map((offer: any) => ({
@@ -71,22 +43,9 @@ export const PaymentsTable = () => {
 
     const cancelOffer = async (id: string) => {
 
-        //abi
-        const response = await fetch("escrow.abi.json");
-        const abiJson = await response.text();
-        let abiObj = JSON.parse(abiJson);
-        let abi = AbiRegistry.create(abiObj);
-    
-        //factory
-        const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
-        let factory = new SmartContractTransactionsFactory({
-            config: factoryConfig,
-            abi: abi
-        });
-
         // cancelOffer transaction
         let args = [parseInt(id)]
-        const transaction = factory.createTransactionForExecute({
+        const transaction = escrow_factory.createTransactionForExecute({
             sender: Address.fromBech32(WalletAddressEnum.myWallet),
             contract: Address.fromBech32(ContractAddressEnum.escrowContract),
             function: "cancelOffer",
@@ -116,7 +75,6 @@ export const PaymentsTable = () => {
           updateOffersTable()
         }
       }, [success]);
-
     
     return (
         <div className="flex flex-col p-6 rounded-xl m-1 bg-white justify-center">
@@ -156,9 +114,4 @@ export const PaymentsTable = () => {
                 }
         </div>
     )
-
-
- 
-
-  
 }

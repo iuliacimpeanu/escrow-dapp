@@ -2,7 +2,6 @@ import axios from "axios";
 import { useState } from "react";
 import { nominateValue } from "../../../utils/nominateValue";
 
-
 export const AvailableAmountSection = () => {
     const [amount, setAmount] = useState('');
     
@@ -18,7 +17,6 @@ export const AvailableAmountSection = () => {
                 break;
             }
         }
-    
     }
 
     return (
