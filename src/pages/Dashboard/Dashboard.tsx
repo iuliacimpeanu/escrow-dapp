@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import { AuthRedirectWrapper } from "../../wrappers/AuthRedirectWrapper"
 import { AvailableAmountSection } from "./components/AvailableAmountSection"
-import { OffersTableSection } from "./components/OffersTableSection"
+import { CreatedOffersTableSection } from "./components/CreatedOffersTableSection"
 import { CreateOfferSection } from "./components/CreateOfferSection"
 import { AbiRegistry, QueryRunnerAdapter, SmartContractQueriesController, SmartContractTransactionsFactory, TransactionsFactoryConfig } from "@multiversx/sdk-core/out"
 import { ApiNetworkProvider } from "@multiversx/sdk-network-providers/out"
 import { useGetAccount } from "@multiversx/sdk-dapp/hooks"
+import { WantedOffersTableSection } from "./components/WantedOffersTableSection"
 
 export const Dashboard = () => {
     
@@ -58,11 +59,10 @@ export const Dashboard = () => {
         <div className="h-screen bg-neutral-100 text-3xl font-bold text-center flex flex-col items-center py-4">
             <h2 className="mb-4">Dashboard</h2>
             <div>
-                <div className="flex">
-                    <AvailableAmountSection />
-                    { abi && factory && <CreateOfferSection wallet_address={address} escrow_factory={factory}/>}
-                </div>
-                { abi && factory && controller && <OffersTableSection wallet_address={address} escrow_factory={factory} escrow_controller={controller}/>}
+                <AvailableAmountSection wallet_address={address}/>
+                { abi && factory && <CreateOfferSection wallet_address={address} escrow_factory={factory} />}
+                { abi && factory && controller && <CreatedOffersTableSection wallet_address={address} escrow_factory={factory} escrow_controller={controller}/>}
+                {abi && factory && controller && <WantedOffersTableSection wallet_address={address} escrow_factory={factory} escrow_controller={controller}/>}
             </div>
         </div>
         </AuthRedirectWrapper>

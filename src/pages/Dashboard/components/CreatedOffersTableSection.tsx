@@ -5,19 +5,20 @@ import { useGetActiveTransactionsStatus } from "@multiversx/sdk-dapp/hooks";
 import { formatAmount } from "@multiversx/sdk-dapp/utils/operations";
 import { ContractAddressEnum } from "../../../utils/enums";
 
-interface IOffer{
+interface ICreatedOffer{
     id: string,
-    token_identifier: string,
-    amount: string,
+    offeredToken: string,
+    offeredAmount: string,
     acceptedAddress: string
 }
 
-export const OffersTableSection = ({wallet_address, escrow_factory, escrow_controller}: {wallet_address: string, escrow_factory: SmartContractTransactionsFactory, escrow_controller: SmartContractQueriesController}) => {
+export const CreatedOffersTableSection = ({wallet_address, escrow_factory, escrow_controller}: {wallet_address: string, escrow_factory: SmartContractTransactionsFactory, escrow_controller: SmartContractQueriesController}) => {
     
     const [createdOffers, setCreatedOffers] = useState([]);
     const [showTable, setShowTable] = useState(false)
     const { success } = useGetActiveTransactionsStatus();
 
+    // update offers
     const updateOffersTable = async () => {
 
         // query
@@ -33,8 +34,8 @@ export const OffersTableSection = ({wallet_address, escrow_factory, escrow_contr
         // parse response
         const parsedOffers = offers.map((offer: any) => ({
             id: offer[0],
-            token_identifier: offer[1].offered_payment.token_identifier,
-            amount: formatAmount({input: offer[1].offered_payment.amount.toString()}),
+            offeredToken: offer[1].offered_payment.token_identifier,
+            offeredAmount: formatAmount({input: offer[1].offered_payment.amount.toString()}),
             acceptedAddress: offer[1].accepted_address
         }))
 
@@ -42,9 +43,9 @@ export const OffersTableSection = ({wallet_address, escrow_factory, escrow_contr
         setShowTable(true)
     }
 
+    // cancelOffer transaction
     const cancelOffer = async (id: string) => {
 
-        // cancelOffer transaction
         let args = [parseInt(id)]
         const tx = escrow_factory.createTransactionForExecute({
             sender: Address.fromBech32(wallet_address),
@@ -79,7 +80,7 @@ export const OffersTableSection = ({wallet_address, escrow_factory, escrow_contr
     
     return (
         <div className="flex flex-col p-6 rounded-xl m-1 bg-white justify-center">
-            <h2 className="flex font-medium group text-sm">Offers</h2>
+            <h2 className="flex font-medium group text-sm">Created Offers</h2>
             <button className="bg-mvx-blue hover:shadow-lg  text-black  py-2 px-2 my-2 rounded-lg text-base" onClick={updateOffersTable}
             >Show Offers
             </button>
@@ -94,12 +95,12 @@ export const OffersTableSection = ({wallet_address, escrow_factory, escrow_contr
                 </tr>
                 </thead>
                 <tbody className="bg-gray-100 divide-y divide-gray-300">
-                    {createdOffers.map((offer: IOffer) => (
+                    {createdOffers.map((offer: ICreatedOffer) => (
                 <tr 
                 key={offer.id}
                 >
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-medium">{offer.token_identifier.toString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-medium">{offer.amount.toString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-medium">{offer.offeredToken.toString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-medium">{offer.offeredAmount.toString()}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-medium">{offer.acceptedAddress.toString()}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-medium">
                         <button onClick={() => cancelOffer(offer.id)} 
