@@ -73,25 +73,34 @@ export const CreateOfferSection = ({ wallet_address, escrow_factory }: { wallet_
 
   return (
     
-    <div className=" flex flex-col p-4 rounded-xl m-1 bg-white justify-center">
+    <div className="flex flex-col p-4 rounded-xl m-2 bg-white justify-center">
         <h2 className="flex font-medium group text-sm">Create Offer</h2>
-        <div className="flex gap-5 items-center">
-          <div className="w-1/2 flex flex-col gap-y-2 my-3">
-            <input type="text" placeholder="accepted token" onChange={handleAcceptedTokenInput} className="border border-gray-300 rounded-lg text-base px-4"/>
-            <input type="text" placeholder="accepted amount" onChange={handleAcceptedAmountInput} className="border border-gray-300 rounded-lg text-base px-4"/>
-            <input type="text" placeholder="accepted address" onChange={handleAcceptedAddressInput} className="border border-gray-300 rounded-lg text-base px-4"/>
+        <div className="flex flex-col gap-5 items-center">
+
+          <div className="w-full flex gap-x-5 my-2">
+            <div className="w-1/2 flex flex-col gap-y-3">
+              {/* <label htmlFor="offered_token" className="text-xs text-black">Body</label> */}
+              <input id="offered_token"type="text" placeholder="offered token" onChange={handleOfferedTokenInput} className="border border-gray-300 rounded-lg text-sm px-4 py-2 font-medium"/>
+              <input type="text" placeholder="offered amount" onChange={handleOfferedAmountInput} className="border border-gray-300 rounded-lg text-sm px-4 py-2 font-medium"/>
+              <input type="text" placeholder="accepted address" onChange={handleAcceptedAddressInput} className="border border-gray-300 rounded-lg text-sm px-4 py-2 font-medium"/>
+            </div>
+
+            <div className="w-1/2 flex flex-col gap-y-3">
+              <input type="text" placeholder="accepted token" onChange={handleAcceptedTokenInput} className="border border-gray-300 rounded-lg text-sm px-4 py-2 font-medium"/>
+              <input type="text" placeholder="accepted amount" onChange={handleAcceptedAmountInput} className="border border-gray-300 rounded-lg text-sm px-4 py-2 font-medium"/>
+            </div>
           </div>
-          <div className="w-1/2 flex flex-col gap-y-2 my-3">
-            <input type="text" placeholder="offered token" onChange={handleOfferedTokenInput} className="border border-gray-300 rounded-lg text-base px-4"/>
-            <input type="text" placeholder="offered amount" onChange={handleOfferedAmountInput} className="border border-gray-300 rounded-lg text-base px-4"/>
-          </div>
+
           <button
           onClick={createOffer}
-          className="w-1/2 bg-mvx-blue hover:shadow-lg  text-black  py-2 px-2 my-2 rounded-lg text-base"
+          className="w-full bg-mvx-blue hover:shadow-lg  text-black  py-2 px-2 rounded-lg text-base"
           >
-          Create offer
+          Create Offer
           </button>
         </div>
     </div>
+
+    
+
   );
 };

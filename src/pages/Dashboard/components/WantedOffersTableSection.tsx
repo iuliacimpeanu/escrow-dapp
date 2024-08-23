@@ -19,6 +19,20 @@ export const WantedOffersTableSection = ({ wallet_address, escrow_factory, escro
     const [wantedOffers, setWantedOffers] = useState([]);
     const [showTable, setShowTable] = useState(false)
     const { success } = useGetActiveTransactionsStatus();
+    const [toggle, setToggle] = useState(true);
+
+    const handleToggle = () => {
+        setToggle(!toggle)
+        setShowTable(!showTable)
+        if(toggle){
+            updateWantedOffersTable();
+        }
+    }
+    
+    // useEffect(() => {
+    //     setShowTable(!toggle); 
+    //     updateWantedOffersTable();
+    //   }, []);
 
     //update wanted offers
     const updateWantedOffersTable = async () => {
@@ -91,19 +105,16 @@ export const WantedOffersTableSection = ({ wallet_address, escrow_factory, escro
       }, [success]);
       
     return (
-       <div className="flex flex-col p-6 rounded-xl m-1 bg-white justify-center">
+       <div className="flex flex-col p-6 rounded-xl m-2 bg-white justify-center">
             <h2 className="flex font-medium group text-sm">Wanted Offers</h2>
-            <button className="bg-mvx-blue hover:shadow-lg  text-black  py-2 px-2 my-2 rounded-lg text-base" onClick={updateWantedOffersTable}
-            >Show Wanted Offers
-            </button>
             {showTable &&
             <table className="min-w-full divide-y divide-gray-200 my-4">
                 <thead className="bg-mvx-blue rounded-t-lg">
                 <tr>
-                    <th className="px-6 py-3 text-xs font-semibold text-black uppercase">Token Identifier</th>
-                    <th className="px-6 py-3 text-xs font-semibold text-black uppercase">Amount</th>
-                    <th className="px-6 py-3 text-xs font-semibold text-black uppercase">Accepted Address</th>
-                    <th className="px-6 py-3 text-xs font-semibold text-black uppercase">Accept Offer</th>
+                    <th className="px-6 py-3 text-sm font-semibold text-black uppercase">Token Identifier</th>
+                    <th className="px-6 py-3 text-sm font-semibold text-black uppercase">Amount</th>
+                    <th className="px-6 py-3 text-sm font-semibold text-black uppercase">Accepted Address</th>
+                    <th className="px-6 py-3 text-sm font-semibold text-black uppercase">Accept Offer</th>
                 </tr>
                 </thead>
                 <tbody className="bg-gray-100 divide-y divide-gray-300">
@@ -111,10 +122,10 @@ export const WantedOffersTableSection = ({ wallet_address, escrow_factory, escro
                 <tr 
                 key={offer.id}
                 >
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-medium">{offer.offeredToken.toString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-medium">{offer.offeredAmount.toString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-medium">{offer.acceptedAddress.toString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-black font-medium">
+                    <td className="px-6 py-4 text-sm text-black font-medium">{offer.offeredToken.toString()}</td>
+                    <td className="px-6 py-4 text-sm text-black font-medium">{offer.offeredAmount.toString()}</td>
+                    <td className="px-6 py-4 text-sm text-black font-medium">{offer.acceptedAddress.toString()}</td>
+                    <td className="px-6 py-4 text-sm text-black font-medium">
                         <button 
                         onClick={() => acceptOffer(offer.id, offer.acceptedToken, offer.acceptedAmount)} 
                         className="bg-black text-white hover:scale-105 rounded-lg px-4 py-1"
@@ -127,6 +138,11 @@ export const WantedOffersTableSection = ({ wallet_address, escrow_factory, escro
                 </tbody>
             </table>
             }
+            <button 
+            className={`text-black py-2 px-2 my-2 rounded-lg text-base hover:shadow-lg ${toggle ? 'bg-mvx-blue' : 'bg-gray-200'} `}
+            onClick={handleToggle}
+            >Show Wanted Offers
+            </button>
         </div>
     )
 }
