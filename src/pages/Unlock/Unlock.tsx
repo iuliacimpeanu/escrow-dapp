@@ -22,13 +22,13 @@ export const UnlockPage = () => {
 
     return(
         <AuthRedirectWrapper requireAuth={false}>
-            <div className="flex justify-center items-center">
+            <div className="h-screen flex justify-center items-center bg-black">
                 <div
-                    className="flex flex-col p-6 items-center justify-center gap-4 rounded-xl bg-[#f6f8fa]"
+                    className="flex flex-col p-6 items-center justify-center gap-4 rounded-xl bg-mvx-bg-gray"
                     data-testid="unlockPage"
                 >
                     <div className="flex flex-col items-center gap-1">
-                    <h2 className="text-2xl">Login</h2>
+                    <h2 className="text-2xl text-mvx-lighter-gray">Login</h2>
 
                     <p className="text-center text-gray-400">Choose a login method</p>
                 </div>

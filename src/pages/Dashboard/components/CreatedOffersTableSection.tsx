@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Address, SmartContractQueriesController, SmartContractTransactionsFactory } from "@multiversx/sdk-core";
+import { useEffect, useRef, useState } from "react";
+import { AbiRegistry, Address, SmartContractQueriesController, SmartContractTransactionsFactory } from "@multiversx/sdk-core";
 import { sendTransactions } from "@multiversx/sdk-dapp/services";
-import { useGetActiveTransactionsStatus } from "@multiversx/sdk-dapp/hooks";
+import { useGetActiveTransactionsStatus} from "@multiversx/sdk-dapp/hooks";
 import { formatAmount } from "@multiversx/sdk-dapp/utils/operations";
 import { ContractAddressEnum } from "../../../utils/enums";
 
@@ -12,29 +12,22 @@ interface ICreatedOffer{
     acceptedAddress: string
 }
 
-export const CreatedOffersTableSection = ({wallet_address, escrow_factory, escrow_controller}: {wallet_address: string, escrow_factory: SmartContractTransactionsFactory, escrow_controller: SmartContractQueriesController}) => {
-    
-    const [createdOffers, setCreatedOffers] = useState([]);
-    const [showTable, setShowTable] = useState(false)
-    const { success } = useGetActiveTransactionsStatus();
-    const [toggle, setToggle] = useState(true);
+export const CreatedOffersTableSection = ({wallet_address, escrow_abi, escrow_factory, escrow_controller}: {wallet_address: string, escrow_abi: AbiRegistry, escrow_factory: SmartContractTransactionsFactory, escrow_controller: SmartContractQueriesController}) => {
 
-    const handleToggle = () => {
-        setToggle(!toggle)
-        setShowTable(!showTable)
-        if(toggle){
-            updateOffersTable();
-        } 
-    }
-    
-    // useEffect(() => {
-    //     if(toggle){
-    //         setShowTable(false);
-    //     } else {
-    //         setShowTable(true);
-    //         updateOffersTable();
-    //     }
-    //   }, []);
+    const [createdOffers, setCreatedOffers] = useState([]);
+    const { success } = useGetActiveTransactionsStatus();
+    const hasRunRef = useRef(false); //to run only at first render
+
+    useEffect(() => {
+        const initializeTable = async () => {
+            if (escrow_abi && !hasRunRef.current) {
+                await updateOffersTable();
+                hasRunRef.current = true;
+            }
+        };
+
+        initializeTable();
+    }, [escrow_abi]); 
 
     // update offers
     const updateOffersTable = async () => {
@@ -58,7 +51,6 @@ export const CreatedOffersTableSection = ({wallet_address, escrow_factory, escro
         }))
 
         setCreatedOffers(parsedOffers)
-        setShowTable(true)
     }
 
     // cancelOffer transaction
@@ -89,7 +81,7 @@ export const CreatedOffersTableSection = ({wallet_address, escrow_factory, escro
         });
     }
 
-    //refresh table
+    // refresh table
     useEffect(() => {
         if (success) {
           updateOffersTable()
@@ -97,29 +89,30 @@ export const CreatedOffersTableSection = ({wallet_address, escrow_factory, escro
       }, [success]);
     
     return (
-        <div className="flex flex-col p-6 rounded-xl m-2 bg-white justify-center">
-            <h2 className="flex font-medium group text-sm">Created Offers</h2>
-            {showTable &&
-            <table className="min-w-full divide-y divide-gray-200 my-4">
-                <thead className="bg-mvx-blue rounded-t-lg">
+        <div className="flex flex-col p-6 px-10 rounded-xl m-2 bg-mvx-bg-gray justify-center">
+            <h2 className="flex font-medium group text-sm text-gray-300">Created Offers</h2>
+            <div className="my-5">
+            <table className="min-w-full divide-y divide-gray-200 border border-gray-500 rounded-lg">
+                <thead className="bg-mvx-button-bg-gray rounded-t-lg">
                 <tr>
-                    <th className="px-6 py-3 text-sm font-semibold text-black uppercase">Token Identifier</th>
-                    <th className="px-6 py-3 text-sm font-semibold text-black uppercase">Amount</th>
-                    <th className="px-6 py-3 text-sm font-semibold text-black uppercase">Accepted Address</th>
-                    <th className="px-6 py-3 text-sm font-semibold text-black uppercase">Cancel Offer</th>
+                    <th className="px-6 py-3 text-sm font-semibold text-gray-300">Token Identifier</th>
+                    <th className="px-6 py-3 text-sm font-semibold text-gray-300">Amount</th>
+                    <th className="px-6 py-3 text-sm font-semibold text-gray-300">Accepted Address</th>
+                    <th className="px-6 py-3 text-sm font-semibold text-gray-300">Cancel Offer</th>
                 </tr>
                 </thead>
-                <tbody className="bg-gray-100 divide-y divide-gray-300">
+                <tbody className="bg-mvx-bg-gray divide-y divide-gray-500">
                     {createdOffers.map((offer: ICreatedOffer) => (
                 <tr 
                 key={offer.id}
+                className="divide-x divide-gray-500"
                 >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">{offer.offeredToken.toString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">{offer.offeredAmount.toString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">{offer.acceptedAddress.toString()}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-mvx-blue font-normal">{offer.offeredToken.toString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-mvx-blue font-normal">{offer.offeredAmount.toString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-mvx-blue font-normal">{offer.acceptedAddress.toString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-mvx-blue font-normal">
                         <button onClick={() => cancelOffer(offer.id)} 
-                                className="bg-black text-white hover:scale-105 rounded-lg px-4 py-1"
+                                className="bg-mvx-blue text-mvx-button-text hover:scale-105 rounded-lg px-4 py-1"
                         >
                         Cancel      
                         </button>
@@ -128,12 +121,7 @@ export const CreatedOffersTableSection = ({wallet_address, escrow_factory, escro
                 ))}
                 </tbody>
             </table>
-            }
-            <button 
-            className={`text-black py-2 px-2 my-2 rounded-lg text-base hover:shadow-lg ${toggle ? 'bg-mvx-blue' : 'bg-gray-200'} `}
-            onClick={handleToggle}
-            >Show Created Offers
-            </button>
+            </div>
         </div>
     )
 }

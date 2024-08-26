@@ -56,13 +56,13 @@ export const Dashboard = () => {
 
     return (
         <AuthRedirectWrapper>
-        <div className="bg-neutral-100 text-3xl font-bold text-center flex flex-col items-center py-4">
+        <div className="bg-black text-3xl font-bold text-center flex flex-col items-center py-4">
             <h2 className="mb-4">Dashboard</h2>
-            <div>
+            <div className="w-2/3">
                 <AvailableAmountSection wallet_address={address}/>
                 { abi && factory && <CreateOfferSection wallet_address={address} escrow_factory={factory} />}
-                { abi && factory && controller && <CreatedOffersTableSection wallet_address={address} escrow_factory={factory} escrow_controller={controller}/>}
-                {abi && factory && controller && <WantedOffersTableSection wallet_address={address} escrow_factory={factory} escrow_controller={controller}/>}
+                { abi && factory && controller && <CreatedOffersTableSection wallet_address={address}escrow_abi={abi} escrow_factory={factory} escrow_controller={controller}/>}
+                {abi && factory && controller && <WantedOffersTableSection wallet_address={address} escrow_abi={abi} escrow_factory={factory} escrow_controller={controller}/>}
             </div>
         </div>
         </AuthRedirectWrapper>

@@ -1,7 +1,7 @@
 import { sendTransactions } from "@multiversx/sdk-dapp/services";
 import { SmartContractTransactionsFactory} from "@multiversx/sdk-core"
 import { Address, TokenTransfer, Token } from "@multiversx/sdk-core/out";
-import { ContractAddressEnum,  } from "../../../utils";
+import { ContractAddressEnum  } from "../../../utils";
 import { parseAmount } from "@multiversx/sdk-dapp/utils";
 import { useState } from "react";
 
@@ -73,29 +73,44 @@ export const CreateOfferSection = ({ wallet_address, escrow_factory }: { wallet_
 
   return (
     
-    <div className="flex flex-col p-4 rounded-xl m-2 bg-white justify-center">
-        <h2 className="flex font-medium group text-sm">Create Offer</h2>
-        <div className="flex flex-col gap-5 items-center">
+    <div className="flex flex-col p-4 px-10 rounded-xl m-2 justify-center bg-mvx-bg-gray">
+        <h2 className="flex font-medium group text-sm text-gray-300">Create Offer</h2>
+        <div className="flex flex-col items-center my-5 font-normal">
+          <div className="w-full flex flex-col gap-10">
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col items-start gap-1 w-full">
+                <label htmlFor="offered_token" className="text-xs text-mvx-lighter-gray">Offered Token</label>
+                <input id="offered_token" type="text" onChange={handleOfferedTokenInput} className="rounded-lg text-sm px-4 py-2 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
+              </div>
 
-          <div className="w-full flex gap-x-5 my-2">
-            <div className="w-1/2 flex flex-col gap-y-3">
-              {/* <label htmlFor="offered_token" className="text-xs text-black">Body</label> */}
-              <input id="offered_token"type="text" placeholder="offered token" onChange={handleOfferedTokenInput} className="border border-gray-300 rounded-lg text-sm px-4 py-2 font-medium"/>
-              <input type="text" placeholder="offered amount" onChange={handleOfferedAmountInput} className="border border-gray-300 rounded-lg text-sm px-4 py-2 font-medium"/>
-              <input type="text" placeholder="accepted address" onChange={handleAcceptedAddressInput} className="border border-gray-300 rounded-lg text-sm px-4 py-2 font-medium"/>
+              <div className="flex flex-col items-start gap-1 w-full">
+                <label htmlFor="offered_amount" className="text-xs text-mvx-lighter-gray">Offered Amount</label>
+                <input id="offered_amount" type="text" onChange={handleOfferedAmountInput} className="rounded-lg text-sm px-4 py-2 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
+              </div>
             </div>
 
-            <div className="w-1/2 flex flex-col gap-y-3">
-              <input type="text" placeholder="accepted token" onChange={handleAcceptedTokenInput} className="border border-gray-300 rounded-lg text-sm px-4 py-2 font-medium"/>
-              <input type="text" placeholder="accepted amount" onChange={handleAcceptedAmountInput} className="border border-gray-300 rounded-lg text-sm px-4 py-2 font-medium"/>
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col items-start gap-1 w-full">
+                <label htmlFor="accepted_token" className="text-xs text-mvx-lighter-gray">Accepted Token</label>
+                <input id="accepted_token" type="text" onChange={handleAcceptedTokenInput} className="rounded-lg text-sm px-4 py-2 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
+              </div>
+
+              <div className="flex flex-col items-start gap-1 w-full">
+                <label htmlFor="accepted_amount" className="text-xs text-mvx-lighter-gray">Accepted Amount</label>
+                <input id="accepted_amount" type="text" onChange={handleAcceptedAmountInput} className="rounded-lg text-sm px-4 py-2 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
+              </div>
+
+              <div className="flex flex-col items-start gap-1 w-full">
+                <label htmlFor="accepted_address" className="text-xs text-mvx-lighter-gray">Accepted Address</label>
+                <input id="accepted_address" type="text" onChange={handleAcceptedAddressInput} className="rounded-lg text-sm px-4 py-2 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
+              </div>
             </div>
           </div>
-
           <button
           onClick={createOffer}
-          className="w-full bg-mvx-blue hover:shadow-lg  text-black  py-2 px-2 rounded-lg text-base"
+          className="bg-mvx-blue hover:scale-110  text-mvx-button-text  py-3 px-6 mt-5 rounded-lg text-sm"
           >
-          Create Offer
+          Create offer
           </button>
         </div>
     </div>
