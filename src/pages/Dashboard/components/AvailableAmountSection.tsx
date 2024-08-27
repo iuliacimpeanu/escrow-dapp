@@ -42,7 +42,7 @@ export const AvailableAmountSection = ({wallet_address}: {wallet_address: string
       <div className="flex flex-col gap-3 my-5">
         <div className="flex justify-start items-center gap-3 w-full">
           <label htmlFor="address" className="text-xs text-mvx-lighter-gray font-medium">Address</label>
-          <span id="address" className="text-sm font-medium text-mvx-text-gray">{wallet_address}</span>
+          <span id="address" className="text-sm font-medium text-mvx-blue">{wallet_address}</span>
         </div>
         <div className="flex items-center gap-5">
           <select 
