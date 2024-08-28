@@ -4,9 +4,10 @@ import { DappProvider } from "@multiversx/sdk-dapp/wrappers";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { HomePage } from './pages/Home';
 import { UnlockPage } from './pages/Unlock';
-import { Dashboard } from './pages/Dashboard';
+import { DashboardEscrow } from './pages/Dashboard-Escrow';
 import { Nav } from './components/Nav';
 import { NotificationModal, SignTransactionsModals, TransactionsToastList } from '@multiversx/sdk-dapp/UI';
+import { DashboardLiquidLocking } from './pages/Dashboard-Liquid-Locking';
 
 
 
@@ -32,7 +33,8 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />}></Route>
             <Route path="/unlock" element={<UnlockPage />}></Route>
-            <Route path="/dashboard" element={<Dashboard />}></Route>
+            <Route path="/dashboard" element={<DashboardEscrow />}></Route>
+            <Route path="/dashboard-liquid-locking" element={<DashboardLiquidLocking />}></Route>
           </Routes>
 
       </Router>
