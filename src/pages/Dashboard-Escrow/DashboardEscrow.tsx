@@ -11,7 +11,7 @@ import { WantedOffersTableSection } from "./components/WantedOffersTableSection"
 import { formatAmount } from "@multiversx/sdk-dapp/utils";
 
 
-export const Dashboard = () => {
+export const DashboardEscrow = () => {
     
     const { address } = useGetAccount();
     const [abi, setAbi] = useState<AbiRegistry>();
@@ -88,7 +88,8 @@ export const Dashboard = () => {
     return (
         <AuthRedirectWrapper>
         <div className="bg-black text-3xl font-bold text-center flex flex-col items-center py-4">
-            <h2 className="mb-4 text-gray-300">Dashboard</h2>
+            <h4 className="mb-4 text-gray-300 text-xl">Dashboard</h4>
+            <h1 className="mb-4 text-gray-300">Escrow</h1>
             <div className="w-2/3">
                 <AvailableAmountSection wallet_address={address} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>
                 { abi && factory && <CreateOfferSection wallet_address={address} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount} escrow_factory={factory} />}
