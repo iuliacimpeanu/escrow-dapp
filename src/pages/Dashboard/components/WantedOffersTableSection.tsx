@@ -18,17 +18,17 @@ export const WantedOffersTableSection = ({ wallet_address, escrow_abi, escrow_fa
     
     const [wantedOffers, setWantedOffers] = useState([]);
     const { success } = useGetActiveTransactionsStatus();
-    const hasRunRef = useRef(false); //to run only at first render
+    const hasRunWantedRef = useRef(false); //to run only at first render
 
     useEffect(() => {
-        const initializeTable = async () => {
-            if (escrow_abi && !hasRunRef.current) {
+        const initializeWantedTable = async () => {
+            if (escrow_abi && !hasRunWantedRef.current) {
                 await updateWantedOffersTable();
-                hasRunRef.current = true;
+                hasRunWantedRef.current = true;
             }
         };
 
-        initializeTable();
+        initializeWantedTable();
     }, [escrow_abi]); 
 
     //update wanted offers
