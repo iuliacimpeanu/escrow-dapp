@@ -14,7 +14,7 @@ interface IWantedOffer{
     acceptedAddress: string
 }
 
-export const WantedOffersTableSection = ({ wallet_address, escrow_abi, escrow_factory, escrow_controller }: {  wallet_address: string, escrow_abi: AbiRegistry, escrow_factory: SmartContractTransactionsFactory, escrow_controller: SmartContractQueriesController}) => {
+export const WantedOffersTableSection = ({ wallet_address, escrow_abi, escrow_factory, escrow_controller, checkAvailableAmount }: {  wallet_address: string, escrow_abi: AbiRegistry, escrow_factory: SmartContractTransactionsFactory, escrow_controller: SmartContractQueriesController, checkAvailableAmount: (token: string) => string}) => {
     
     const [wantedOffers, setWantedOffers] = useState([]);
     const { success } = useGetActiveTransactionsStatus();
@@ -60,6 +60,12 @@ export const WantedOffersTableSection = ({ wallet_address, escrow_abi, escrow_fa
     // accept offer transaction
     const acceptOffer = async (offer_id: string, accepted_token: string, accepted_amount: string) => {
 
+        const availableAmount: string = checkAvailableAmount(accepted_token)
+        if(Number(accepted_amount) > Number(availableAmount)){
+            alert('Insufficient funds! You can\'t accept the offer!\nTransaction is cancelled!')
+            return;
+        }
+        
         let _accepted_amount: bigint = BigInt(parseAmount(accepted_amount));
 
         let args = [parseInt(offer_id)]

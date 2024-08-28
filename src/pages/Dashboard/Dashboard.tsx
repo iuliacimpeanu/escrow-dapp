@@ -93,7 +93,7 @@ export const Dashboard = () => {
                 <AvailableAmountSection wallet_address={address} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>
                 { abi && factory && <CreateOfferSection wallet_address={address} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount} escrow_factory={factory} />}
                 { abi && factory && controller && <CreatedOffersTableSection wallet_address={address}escrow_abi={abi} escrow_factory={factory} escrow_controller={controller}/>}
-                {abi && factory && controller && <WantedOffersTableSection wallet_address={address} escrow_abi={abi} escrow_factory={factory} escrow_controller={controller}/>}
+                {abi && factory && controller && <WantedOffersTableSection wallet_address={address} escrow_abi={abi} escrow_factory={factory} escrow_controller={controller} checkAvailableAmount={checkAvailableAmount}/>}
             </div>
         </div>
         </AuthRedirectWrapper>
