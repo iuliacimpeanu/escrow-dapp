@@ -5,13 +5,14 @@ import { ContractAddressEnum  } from "../../../utils";
 import { parseAmount } from "@multiversx/sdk-dapp/utils";
 import { useState } from "react";
 
-export const CreateOfferSection = ({ wallet_address, escrow_factory }: { wallet_address: string, escrow_factory: SmartContractTransactionsFactory }) => {
+export const CreateOfferSection = ({ wallet_address, tokenOptions, checkAvailableAmount, escrow_factory }: { wallet_address: string, tokenOptions: { identifier: string, balance: string }[], checkAvailableAmount: (token: string) => string, escrow_factory: SmartContractTransactionsFactory }) => {
 
     const [acceptedToken, setAcceptedToken] = useState<string>('');
     const [acceptedAmount, setAcceptedAmount] = useState<string>('');
     const [acceptedAddress, setAcceptedAddress] = useState<string>('');
     const [offeredToken, setOfferedToken] = useState<string>('');
     const [offeredAmount, setOfferedAmount] = useState<string>('');
+    const [availableAmount, setAvailableAmount] = useState('');
   
     const handleAcceptedTokenInput = (event: React.ChangeEvent<HTMLInputElement>) => {
       setAcceptedToken(event.target.value);
@@ -25,8 +26,9 @@ export const CreateOfferSection = ({ wallet_address, escrow_factory }: { wallet_
       setAcceptedAddress(event.target.value);
     }
 
-    const handleOfferedTokenInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleOfferedTokenInput = (event: React.ChangeEvent<HTMLSelectElement>) => {
       setOfferedToken(event.target.value);
+      setAvailableAmount(checkAvailableAmount(event.target.value))
     }
 
     const handleOfferedAmountInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +37,11 @@ export const CreateOfferSection = ({ wallet_address, escrow_factory }: { wallet_
 
     //create offer transaction
     const createOffer = async () => {
+
+      if(Number(offeredAmount) > Number(availableAmount)){
+        alert('Insufficient funds! Check available amount!\nTransaction is cancelled!')
+        return;
+      }
 
       let _acceptedAmount: bigint = BigInt(parseAmount(acceptedAmount));
       let _offeredAmount: bigint = BigInt(parseAmount(offeredAmount));
@@ -76,34 +83,47 @@ export const CreateOfferSection = ({ wallet_address, escrow_factory }: { wallet_
     <div className="flex flex-col p-4 px-10 rounded-xl m-2 justify-center bg-mvx-bg-gray">
         <h2 className="flex font-medium group text-sm text-gray-300">Create Offer</h2>
         <div className="flex flex-col items-center my-5 font-normal">
-          <div className="w-full flex flex-col gap-10">
-            <div className="flex flex-col gap-3">
-              <div className="flex flex-col items-start gap-1 w-full">
+          <div className="w-full flex flex-col gap-5">
+            <div className="flex items-center gap-5 w-full">
+              <div className="flex flex-col items-start gap-1 w-1/2">
                 <label htmlFor="offered_token" className="text-xs text-mvx-lighter-gray">Offered Token</label>
-                <input id="offered_token" type="text" onChange={handleOfferedTokenInput} className="rounded-lg text-sm px-4 py-2 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
+                <select 
+                  id="select-token" 
+                  value={offeredToken} 
+                  onChange={handleOfferedTokenInput}
+                  className="px-6 py-3 rounded-lg text-sm font-medium bg-mvx-button-bg-gray text-mvx-text-gray w-full"
+                  >
+                    <option value="" disabled>
+                      Select token
+                    </option>
+                    {tokenOptions.map((tokenOption, index) => (
+                      <option key={index} value={tokenOption.identifier}>
+                        {tokenOption.identifier}
+                      </option>
+                    ))}
+                </select>
               </div>
-
-              <div className="flex flex-col items-start gap-1 w-full">
+              <div className="flex flex-col items-start gap-1 w-1/2">
                 <label htmlFor="offered_amount" className="text-xs text-mvx-lighter-gray">Offered Amount</label>
-                <input id="offered_amount" type="text" onChange={handleOfferedAmountInput} className="rounded-lg text-sm px-4 py-2 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
+                <input id="offered_amount" type="text" onChange={handleOfferedAmountInput} className="rounded-lg text-sm px-6 py-3 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
               </div>
             </div>
 
-            <div className="flex flex-col gap-3">
-              <div className="flex flex-col items-start gap-1 w-full">
+            <div className="flex items-center gap-5 w-full">
+              <div className="flex flex-col items-start gap-1 w-1/2">
                 <label htmlFor="accepted_token" className="text-xs text-mvx-lighter-gray">Accepted Token</label>
-                <input id="accepted_token" type="text" onChange={handleAcceptedTokenInput} className="rounded-lg text-sm px-4 py-2 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
+                <input id="accepted_token" type="text" onChange={handleAcceptedTokenInput} className="rounded-lg text-sm px-6 py-3 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
               </div>
 
-              <div className="flex flex-col items-start gap-1 w-full">
+              <div className="flex flex-col items-start gap-1 w-1/2">
                 <label htmlFor="accepted_amount" className="text-xs text-mvx-lighter-gray">Accepted Amount</label>
-                <input id="accepted_amount" type="text" onChange={handleAcceptedAmountInput} className="rounded-lg text-sm px-4 py-2 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
+                <input id="accepted_amount" type="text" onChange={handleAcceptedAmountInput} className="rounded-lg text-sm px-6 py-3 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
               </div>
+            </div>
 
-              <div className="flex flex-col items-start gap-1 w-full">
-                <label htmlFor="accepted_address" className="text-xs text-mvx-lighter-gray">Accepted Address</label>
-                <input id="accepted_address" type="text" onChange={handleAcceptedAddressInput} className="rounded-lg text-sm px-4 py-2 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
-              </div>
+            <div className="flex flex-col items-start gap-1 w-full">
+              <label htmlFor="accepted_address" className="text-xs text-mvx-lighter-gray">Accepted Address</label>
+              <input id="accepted_address" type="text" onChange={handleAcceptedAddressInput} className="rounded-lg text-sm px-6 py-3 font-medium bg-mvx-button-bg-gray text-gray-300 w-full"/>
             </div>
           </div>
           <button

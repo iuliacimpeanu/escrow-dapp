@@ -1,39 +1,13 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { formatAmount } from "@multiversx/sdk-dapp/utils";
+import { useState } from "react";
 
-export const AvailableAmountSection = ({wallet_address}: {wallet_address: string}) => {
+export const AvailableAmountSection = ({wallet_address, tokenOptions, checkAvailableAmount}: {wallet_address: string, tokenOptions: { identifier: string, balance: string }[], checkAvailableAmount: (token: string) => string}) => {
     const [amount, setAmount] = useState('');
     const [token, setToken] = useState<string | undefined>('');
-    const [tokenOptions, setTokenOptions] = useState<{ identifier: string, balance: string }[]>([]);
-
-    // get token options from wallet
-    useEffect(() => {
-      const fetchTokens = async () => {
-        try {
-          const tx = await axios.get(`https://devnet-api.multiversx.com/accounts/${wallet_address}/tokens`);
-          const options = tx.data.map((option: { identifier: string, balance: string }) => ({
-            identifier: option.identifier,
-            balance: option.balance
-          }));
-          setTokenOptions(options);
-        } catch (error) {
-          console.error('Error fetching token options:', error);
-        }
-      };
-  
-      fetchTokens();
-    }, [wallet_address]);
 
     // update selected token and its available amount
     const handleTokenSelection = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const tokenIdentifier = event.target.value;
-      setToken(tokenIdentifier)
-      const selectedToken = tokenOptions.find((option) => option.identifier === tokenIdentifier)
-      if(selectedToken != null){
-        const availableAmount = formatAmount({input: selectedToken.balance});
-        setAmount(availableAmount)
-      }
+      setToken(event.target.value)
+      setAmount(checkAvailableAmount(event.target.value))
     }
 
     return (
