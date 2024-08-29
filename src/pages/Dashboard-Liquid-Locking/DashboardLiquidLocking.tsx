@@ -7,6 +7,8 @@ import { AuthRedirectWrapper } from "../../wrappers/AuthRedirectWrapper";
 import { WhitelistTokensSection } from "./components/WhitelistTokensSection";
 import { LockTokensSection } from "./components/LockTokensSection";
 import { formatAmount } from "@multiversx/sdk-dapp/utils";
+import { UnbondTokensSection } from "./components/UnbondTokensSection";
+import { UnlockTokensSection } from "./components/UnlockTokensSection";
 
 export const DashboardLiquidLocking = () => {
 
@@ -31,68 +33,68 @@ export const DashboardLiquidLocking = () => {
         };
     
         fetchTokens();
-      }, [address]);
+    }, [address]);
 
-      const checkAvailableAmount = (token: string) => {
-        const selectedToken = tokenOptions.find((option) => option.identifier === token)
-        let availableAmount: string = '0'
-        if(selectedToken != null){
-          availableAmount = formatAmount({input: selectedToken.balance});
-        }
-        return availableAmount;
+    const checkAvailableAmount = (token: string) => {
+      const selectedToken = tokenOptions.find((option) => option.identifier === token)
+      let availableAmount: string = '0'
+      if(selectedToken != null){
+        availableAmount = formatAmount({input: selectedToken.balance});
+      }
+      return availableAmount;
     }
     
     const generateTransactionProps = async () => {
 
-        //abi
-        const response = await fetch("liquid-locking.abi.json");
-        const abiJson = await response.text();
-        let abiObj = JSON.parse(abiJson);
-        let _abi = AbiRegistry.create(abiObj);
-        setAbi(_abi);
-    
-        //factory
-        const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
-        let _factory = new SmartContractTransactionsFactory({
-            config: factoryConfig,
-            abi: abi
-        });
-        setFactory(_factory)
+      //abi
+      const response = await fetch("liquid-locking.abi.json");
+      const abiJson = await response.text();
+      let abiObj = JSON.parse(abiJson);
+      let _abi = AbiRegistry.create(abiObj);
+      setAbi(_abi);
+  
+      //factory
+      const factoryConfig = new TransactionsFactoryConfig({ chainID: "D" });
+      let _factory = new SmartContractTransactionsFactory({
+          config: factoryConfig,
+          abi: abi
+      });
+      setFactory(_factory)
 
-        // queryRunner & networkProvider
-        const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com");
+      // queryRunner & networkProvider
+      const apiNetworkProvider = new ApiNetworkProvider("https://devnet-api.multiversx.com");
 
-        const queryRunner = new QueryRunnerAdapter({
-            networkProvider: apiNetworkProvider
-        });
-        
-        let _controller = new SmartContractQueriesController({
-            queryRunner: queryRunner
-        });
+      const queryRunner = new QueryRunnerAdapter({
+          networkProvider: apiNetworkProvider
+      });
+      
+      let _controller = new SmartContractQueriesController({
+          queryRunner: queryRunner
+      });
 
-        _controller = new SmartContractQueriesController({
-            queryRunner: queryRunner,
-            abi: abi
-        });
-        setController(_controller)
+      _controller = new SmartContractQueriesController({
+          queryRunner: queryRunner,
+          abi: abi
+      });
+      setController(_controller)
     }
 
     useEffect(() => {  
         generateTransactionProps();
     })  
 
-
-    
     return (
-        <AuthRedirectWrapper>
-            <div className="bg-black text-3xl font-bold text-center flex flex-col items-center py-4">
-                <h4 className="mb-4 text-gray-300 text-xl">Dashboard</h4>
-                <h1 className="mb-4 text-gray-300">Liquid Locking</h1>
-                <div className="w-1/3">
-                { abi && factory && controller && <WhitelistTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions}/>}
-                { abi && factory && controller && <LockTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>}
-                </div>
+      <AuthRedirectWrapper>
+          <div className="bg-black text-3xl font-bold text-center flex flex-col items-center py-4">
+            <h4 className="mb-4 text-gray-300 text-xl">Dashboard</h4>
+            <h1 className="mb-4 text-gray-300">Liquid Locking</h1>
+            <div className="w-1/2">
+              { abi && factory && controller && <WhitelistTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions}/>}
+              { abi && factory && controller && <LockTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>}
+              { abi && factory && controller && <UnlockTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>}
+              { abi && factory && controller && <UnbondTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>}
             </div>
-        </AuthRedirectWrapper>
+          </div>
+      </AuthRedirectWrapper>
     )
 }
