@@ -24,7 +24,6 @@ export const UnbondTokensSection = ({wallet_address, abi, factory, controller}: 
               hasRunUnlockRef.current = true;
           }
       };
-
       initializeUnlockedTable();
     }, [abi]); 
 
@@ -51,8 +50,6 @@ export const UnbondTokensSection = ({wallet_address, abi, factory, controller}: 
     }
 
     const unbondTransaction = async (token_identifier: string) => {
-
-        // if()
 
         let args =[[token_identifier]]
         const tx = factory.createTransactionForExecute({
@@ -95,19 +92,17 @@ export const UnbondTokensSection = ({wallet_address, abi, factory, controller}: 
                 <tr>
                     <th className="px-6 py-3 text-sm font-semibold text-gray-300">Token Identifier</th>
                     <th className="px-6 py-3 text-sm font-semibold text-gray-300">Amount</th>
-                    {/* <th className="px-6 py-3 text-sm font-semibold text-gray-300">Unbond Epoch</th> */}
                     <th className="px-6 py-3 text-sm font-semibold text-gray-300">Unbond Token</th>
                 </tr>
                 </thead>
                 <tbody className="bg-mvx-bg-gray divide-y divide-gray-500">
-                    {unlockedTokensAmounts.map((tokenAmount: IUnlockedTokenAmount) => (
+                    {unlockedTokensAmounts.map((tokenAmount: IUnlockedTokenAmount, index) => (
                 <tr 
-                key={tokenAmount.token_identifier}
+                key={index}
                 className="divide-x divide-gray-500"
                 >
                     <td className="px-6 py-3 text-sm text-mvx-blue font-normal">{tokenAmount.token_identifier.toString()}</td>
                     <td className="px-6 py-3 text-sm text-mvx-blue font-normal">{tokenAmount.amount.toString()}</td>
-                    {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-mvx-blue font-normal">{tokenAmount.unbond_epoch.toString()}</td> */}
                     <td className="px-6 py-3 text-sm text-mvx-blue font-normal">
                         <button 
                         onClick={() => unbondTransaction(tokenAmount.token_identifier.toString())} 

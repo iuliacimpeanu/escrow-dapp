@@ -29,7 +29,6 @@ export const UnlockPage = () => {
                 >
                     <div className="flex flex-col items-center gap-1">
                     <h2 className="text-2xl text-mvx-lighter-gray">Login</h2>
-
                     <p className="text-center text-gray-400">Choose a login method</p>
                 </div>
 

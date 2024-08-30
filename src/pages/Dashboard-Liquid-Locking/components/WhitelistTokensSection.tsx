@@ -23,7 +23,6 @@ export const WhitelistTokensSection = ({wallet_address, abi, factory, controller
               hasRunWhitelistRef.current = true;
           }
       };
-
       initializeWhitelistTable();
   }, [abi]); 
 
@@ -116,8 +115,8 @@ export const WhitelistTokensSection = ({wallet_address, abi, factory, controller
               </tr>
               </thead>
               <tbody className="bg-mvx-bg-gray divide-y divide-gray-500">
-                  {whitelistedTokens.map((token) => (
-                    <tr key={token} className="divide-x divide-gray-500">
+                  {whitelistedTokens.map((token, index) => (
+                    <tr key={index} className="divide-x divide-gray-500">
                       <td className="px-6 py-3 text-sm text-mvx-blue font-normal">{token}</td>
                       <td className="px-6 py-3 text-sm text-mvx-blue font-normal">
                         <button 
@@ -134,7 +133,7 @@ export const WhitelistTokensSection = ({wallet_address, abi, factory, controller
           {/* <button className="bg-mvx-blue hover:scale-110  text-mvx-button-text  py-3 px-6 mt-5 rounded-lg text-sm font-normal" onClick={viewWhitlestedTokens}>View whitelisted tokens</button> */}
           </div>
           <div className="mt-5">
-            <div className="flex items-center gap-10">
+            <div className="flex items-center gap-5">
               <select 
               id="select-token" 
               value={token} 
