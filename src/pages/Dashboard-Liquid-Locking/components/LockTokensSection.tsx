@@ -20,6 +20,14 @@ export const LockTokensSection = ({wallet_address, factory, tokenOptions, checkA
 
   const lockTransaction = async () => {
 
+    if(token === ''){
+      alert('Select token first!')
+      return
+    } else if (lockAmount === '') {
+      alert('Insert amount for lock!')
+      return
+    }
+
     let availableAmount: string = checkAvailableAmount(token)
     if(Number(lockAmount) > Number(availableAmount)){
       alert('Insufficient funds! Transaction is cancelled!')

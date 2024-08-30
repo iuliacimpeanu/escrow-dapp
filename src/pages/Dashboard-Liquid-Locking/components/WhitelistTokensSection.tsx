@@ -6,7 +6,7 @@ import { useGetActiveTransactionsStatus } from "@multiversx/sdk-dapp/hooks";
 
 export const WhitelistTokensSection = ({wallet_address, abi, factory, controller, tokenOptions}: {wallet_address: string, abi:AbiRegistry, factory: SmartContractTransactionsFactory, controller: SmartContractQueriesController, tokenOptions: { identifier: string, balance: string }[]}) => {
 
-  const [whitelistedTokens, setWhitelistedTokens] = useState([]);
+  const [whitelistedTokens, setWhitelistedTokens] = useState<string[]>([]);
   const [token, setToken] = useState<string>('');
   const { success } = useGetActiveTransactionsStatus();
   
@@ -27,6 +27,14 @@ export const WhitelistTokensSection = ({wallet_address, abi, factory, controller
   }, [abi]); 
 
   const whitelistToken = async (token: string) => {
+
+    if(token === ''){
+      alert('No token selected!')
+      return
+    } else if (whitelistedTokens.includes(token)){
+      alert('Token is already whitelisted!')
+      return
+    }
       
     let args = [token]
     const tx = factory.createTransactionForExecute({
