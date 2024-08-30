@@ -23,7 +23,6 @@ export const UnlockTokensSection = ({wallet_address, abi, factory, controller}: 
               hasRunLockRef.current = true;
           }
       };
-
       initializeLockedTable();
   }, [abi]); 
 
@@ -100,9 +99,9 @@ export const UnlockTokensSection = ({wallet_address, abi, factory, controller}: 
               </tr>
               </thead>
               <tbody className="bg-mvx-bg-gray divide-y divide-gray-500">
-                  {lockedTokensAmounts.map((tokenAmount: ILockedTokenAmount) => (
+                  {lockedTokensAmounts.map((tokenAmount: ILockedTokenAmount, index) => (
               <tr 
-              key={tokenAmount.token_identifier}
+              key={index}
               className="divide-x divide-gray-500"
               >
                   <td className="px-6 py-3 text-sm text-mvx-blue font-normal">{tokenAmount.token_identifier.toString()}</td>

@@ -8,6 +8,7 @@ import { DashboardEscrow } from './pages/Dashboard-Escrow';
 import { Nav } from './components/Nav';
 import { NotificationModal, SignTransactionsModals, TransactionsToastList } from '@multiversx/sdk-dapp/UI';
 import { DashboardLiquidLocking } from './pages/Dashboard-Liquid-Locking';
+import { Dashboard } from './pages/Dashboard';
 
 
 
@@ -33,10 +34,10 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />}></Route>
             <Route path="/unlock" element={<UnlockPage />}></Route>
-            <Route path="/dashboard" element={<DashboardEscrow />}></Route>
+            <Route path="/dashboard" element={< Dashboard/>}></Route>
+            <Route path="/dashboard-escrow" element={<DashboardEscrow />}></Route>
             <Route path="/dashboard-liquid-locking" element={<DashboardLiquidLocking />}></Route>
           </Routes>
-
       </Router>
     </DappProvider>
   )

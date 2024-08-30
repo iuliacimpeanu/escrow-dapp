@@ -87,12 +87,12 @@ export const DashboardLiquidLocking = () => {
       <AuthRedirectWrapper>
           <div className="bg-black text-3xl font-bold text-center flex flex-col items-center py-4">
             <h4 className="mb-4 text-gray-300 text-xl">Dashboard</h4>
-            <h1 className="mb-4 text-gray-300">Liquid Locking</h1>
+            <h1 className="mb-4 text-gray-300">Liquid Locking SC</h1>
             <div className="w-1/2">
               { abi && factory && controller && <WhitelistTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions}/>}
-              { abi && factory && controller && <LockTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>}
-              { abi && factory && controller && <UnlockTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>}
-              { abi && factory && controller && <UnbondTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>}
+              { abi && factory && controller && <LockTokensSection wallet_address={address} factory={factory} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>}
+              { abi && factory && controller && <UnlockTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller}/>}
+              { abi && factory && controller && <UnbondTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller}/>}
             </div>
           </div>
       </AuthRedirectWrapper>

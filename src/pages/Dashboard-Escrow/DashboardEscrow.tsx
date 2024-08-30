@@ -89,7 +89,7 @@ export const DashboardEscrow = () => {
         <AuthRedirectWrapper>
         <div className="bg-black text-3xl font-bold text-center flex flex-col items-center py-4">
             <h4 className="mb-4 text-gray-300 text-xl">Dashboard</h4>
-            <h1 className="mb-4 text-gray-300">Escrow</h1>
+            <h1 className="mb-4 text-gray-300">Escrow SC</h1>
             <div className="w-2/3">
                 <AvailableAmountSection wallet_address={address} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>
                 { abi && factory && <CreateOfferSection wallet_address={address} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount} escrow_factory={factory} />}
