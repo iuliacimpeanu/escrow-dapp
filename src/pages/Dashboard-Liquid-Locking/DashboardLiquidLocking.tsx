@@ -17,6 +17,7 @@ export const DashboardLiquidLocking = () => {
     const [factory, setFactory] = useState<SmartContractTransactionsFactory>()
     const [controller, setController] = useState<SmartContractQueriesController>();
     const [tokenOptions, setTokenOptions] = useState<{ identifier: string, balance: string }[]>([]);
+    const [whitelistedTokens, setWhitelistedTokens] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchTokens = async () => {
@@ -89,8 +90,8 @@ export const DashboardLiquidLocking = () => {
             <h4 className="mb-4 text-gray-300 text-xl">Dashboard</h4>
             <h1 className="mb-4 text-gray-300">Liquid Locking SC</h1>
             <div className="w-1/2">
-              { abi && factory && controller && <WhitelistTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions}/>}
-              { abi && factory && controller && <LockTokensSection wallet_address={address} factory={factory} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount}/>}
+              { abi && factory && controller && <WhitelistTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller} tokenOptions={tokenOptions} whitelistedTokens={whitelistedTokens} setWhitelistedTokens={setWhitelistedTokens}/>}
+              { abi && factory && controller && <LockTokensSection wallet_address={address} factory={factory} tokenOptions={tokenOptions} checkAvailableAmount={checkAvailableAmount} whitelistedTokens={whitelistedTokens}/>}
               { abi && factory && controller && <UnlockTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller}/>}
               { abi && factory && controller && <UnbondTokensSection wallet_address={address} abi={abi} factory={factory} controller={controller}/>}
             </div>
