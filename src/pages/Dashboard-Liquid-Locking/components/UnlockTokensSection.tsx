@@ -29,7 +29,6 @@ export const UnlockTokensSection = ({wallet_address, abi, factory, controller}: 
   const viewLockedTokensAmounts = async () => {
 
     let args = [wallet_address]
-    // query
     const query = controller.createQuery({
         contract: ContractAddressEnum.liquidLockingContract,
         function: "lockedTokenAmounts",
@@ -118,7 +117,6 @@ export const UnlockTokensSection = ({wallet_address, abi, factory, controller}: 
               ))}
               </tbody>
           </table>
-          {/* <button className="bg-mvx-blue hover:scale-110  text-mvx-button-text  py-3 px-6 mt-5 rounded-lg text-sm font-normal" onClick={viewLockedTokensAmounts}>View locked tokens</button> */}
           </div>
         </div>
       </div>
